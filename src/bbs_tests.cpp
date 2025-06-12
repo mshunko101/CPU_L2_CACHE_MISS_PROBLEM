@@ -11,17 +11,18 @@ int main()
 {
     std::cout << "Hello World!\n";
 
-    bbs b1(1);
-    bbs b2(2);
-    bbs b3(3);
-    bbs b4(4);
-    bbs b5(5);
+    bbs b1;
+    bbs b2;
+    bbs b3;
+    bbs b4;
+    bbs b5;
 
-
+    b2 = b2 + b3;
+    b1 = b1 + b2;
+    b1 = b1 + b4;
+    b1 = b1 + b5;
 
     tree v_tree;
-
-
 
     v_tree >> b1;
     v_tree >> b2;
@@ -31,6 +32,7 @@ int main()
 
     std::cout << v_tree;
 
+ 
      
     
 }
