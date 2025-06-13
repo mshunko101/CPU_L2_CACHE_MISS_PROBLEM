@@ -23,7 +23,7 @@ public:
 protected:
 	void init_class(bbc* parent);
 	size_t m_vtable_offset;
-	int m_vtable_size;
+	size_t m_vtable_size;
 	bbc* m_prev_bbc;
 private:
 	static vector<bbc> m_tree;

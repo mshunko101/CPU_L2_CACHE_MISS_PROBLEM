@@ -7,7 +7,7 @@ std::ostream& operator<<(std::ostream& o, bbs& _bss)
 	{
 		o << " ";
 	}
-	o << _bss.m_debug_rang;
+	o <<"{" << _bss.m_debug_rang << "}:" << _bss.m_value;
 	return o;
 }
 

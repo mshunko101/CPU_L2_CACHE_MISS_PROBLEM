@@ -8,6 +8,8 @@ class tree;
 std::ostream& operator<<(std::ostream& o, tree& tree);
 tree& operator>>(tree& tree, bbs& item);
 
+
+
 class tree
 {
 public:
