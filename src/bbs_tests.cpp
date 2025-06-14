@@ -23,13 +23,15 @@ int main()
     bbs b10;
     bbs b11;
     bbs b12;
-
-    b1 = b1 + b1;
-    b1 = b1 + b2;
-    b2 = b2 + b3;
-    b3 = b3 + b4;
-    b4 = b4 + b5;
-    b5 = b5 + b6;
+ 
+    b1 += b2;
+    b2 += b3;
+    b3 += b4;
+    b3 += b5;
+    b5 += b6;
+    b1 += b7;
+    b1 += b8;
+    b1 += b9;
 
     tree v_tree;
 
@@ -39,6 +41,9 @@ int main()
     v_tree >> b4;
     v_tree >> b5;
     v_tree >> b6;
+    v_tree >> b7;
+    v_tree >> b8;
+    v_tree >> b9;
 
     v_tree.size();
     std::cout << v_tree;

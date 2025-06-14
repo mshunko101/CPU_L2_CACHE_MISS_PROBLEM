@@ -10,7 +10,7 @@ public:
 	bbs();
 	~bbs();
 
-	bbs operator+(const bbs& r);
+	bbs operator+=(const bbs& r);
 	bool operator<(const bbs& r) const;
 	double rang();
 	double value();

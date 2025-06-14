@@ -24,7 +24,7 @@ bbs::~bbs()
 
 }
 
-bbs bbs::operator+(const bbs& r)
+bbs bbs::operator+=(const bbs& r)
 {
 	r.m_parent_id = this->m_id;
 	return *this;
