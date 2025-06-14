@@ -24,12 +24,12 @@ int main()
     bbs b11;
     bbs b12;
 
-  //  b1 = b1 + b1;
+    b1 = b1 + b1;
     b1 = b1 + b2;
     b2 = b2 + b3;
     b3 = b3 + b4;
-    b1 = b1 + b5;
-    b1 = b1 + b6;
+    b4 = b4 + b5;
+    b5 = b5 + b6;
 
     tree v_tree;
 
