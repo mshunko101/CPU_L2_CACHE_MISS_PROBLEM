@@ -21,7 +21,7 @@ tree& operator>>(tree& tree, bbs& item)
 void tree::commit()
 {
 	bss_classic sort;
-	std::sort(m_tree.begin(), m_tree.end(), std::less<bbs>());
+	std::sort(m_tree.begin(), m_tree.end(), sort);
 }
 
 tree::tree()
