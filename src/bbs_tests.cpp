@@ -24,6 +24,7 @@ int main()
     bbs b11;
     bbs b12;
 
+  //  b1 = b1 + b1;
     b1 = b1 + b2;
     b2 = b2 + b3;
     b3 = b3 + b4;

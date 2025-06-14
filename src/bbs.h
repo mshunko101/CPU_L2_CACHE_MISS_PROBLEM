@@ -34,39 +34,31 @@ public:
 	}
 	bool operator () (const bbs& l, const  bbs& r)
 	{// LINK - TRUE
-		if(l.m_parent_id == 0)
-		{
-			l.m_debug_rang = 0;
-			r.m_debug_rang = r.m_parent_id;
-			return true;
-		}
+		
 
-		if(r.m_parent_id == 0)
-		{
-			r.m_debug_rang = 0;
-			l.m_debug_rang = l.m_parent_id;
-			return true;
-		}
-
+		r.m_debug_rang = r.m_parent_id;
+		l.m_debug_rang = l.m_parent_id;
 
 		if (l.m_parent_id == r.m_id)
 		{
-			r.m_debug_rang = r.m_parent_id;
-			l.m_debug_rang = l.m_parent_id;
+			
+			//l.m_debug_rang = l.m_parent_id + 1;
 			return true;
 		}
 		else
 		{
 			if (l.m_parent_id <= r.m_id)
 			{ 
-				r.m_debug_rang = r.m_parent_id;
-				l.m_debug_rang = l.m_parent_id;
+				if(l.m_parent_id == r.m_parent_id)
+				{
+					l.m_debug_rang = 0;
+					r.m_debug_rang = 0;
+					return l.m_id < r.m_id;
+				}
 				return true;
 			}
 			else if (l.m_parent_id > r.m_id)
 			{
-				r.m_debug_rang = r.m_parent_id;
-				l.m_debug_rang = l.m_parent_id;
 				return false;
 			}
 		}
