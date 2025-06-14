@@ -30,43 +30,36 @@ class bss_classic
 public:
 	bss_classic()
 	{
-		m_order = 0;
+		m_current_root_id = 0;
 	}
 	bool operator () (const bbs& l, const  bbs& r)
-	{
-		bool result = false;
-		
-		if(l.m_id < r.m_parent_id)
-		{//true I
-			result = true;
-		}
-		else if (l.m_id > r.m_parent_id)
-		{//false I
-			l.m_debug_rang = r.m_debug_rang + 1;
-			result = false;
-		}
-		else  
+	{// LINK - TRUE
+		if(l.m_parent_id == 0 || r.m_parent_id == 0)
 		{
-			if (l.m_parent_id < r.m_parent_id)
-			{
-				result = true;
-			}
-			else if (l.m_parent_id > r.m_parent_id)
-			{ 
-				result = false;
-			}
-			else
-			{
-				result = l.m_id < r.m_id;
-			}
-
+			return true;
 		}
-		return result;
-	 
+
+		if (l.m_parent_id == r.m_id)
+		{
+			r.m_debug_rang = l.m_parent_id;
+			l.m_debug_rang = l.m_parent_id;
+			return true;
+		}
+		else
+		{
+			if (l.m_parent_id < r.m_id)
+			{ 
+				return true;
+			}
+			else if (l.m_parent_id > r.m_id)
+			{
+				return false;
+			}
+		}
 	}
 private:
 	int m_max;
-	int m_order;
+	int m_current_root_id;
 };
 
 std::ostream& operator<<(std::ostream& o, bbs& _bss);
