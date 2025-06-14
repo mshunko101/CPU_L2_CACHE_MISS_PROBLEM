@@ -17,6 +17,13 @@ tree& operator>>(tree& tree, bbs& item)
 	return tree;
 }
 
+
+void tree::commit()
+{
+	bss_classic sort;
+	std::sort(m_tree.begin(), m_tree.end(), std::less<bbs>());
+}
+
 tree::tree()
 {
 	
@@ -30,7 +37,5 @@ tree::~tree()
 
 size_t tree::size()
 {
-	bss_classic sort;
-	std::sort(m_tree.begin(), m_tree.end(), sort);
 	return m_tree.size();
 }

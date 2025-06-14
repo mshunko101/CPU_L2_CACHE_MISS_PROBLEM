@@ -45,10 +45,7 @@ bool bbs::operator<(const bbs& r)const
 	}
 	else if (this->m_parent_id > r.m_parent_id)
 	{ 
-		if(this->m_id < r.m_id)
-		{
-			r.m_debug_rang--;
-		}
+		
 		this->m_debug_rang = r.m_debug_rang + 1;
 		return false;
 	}

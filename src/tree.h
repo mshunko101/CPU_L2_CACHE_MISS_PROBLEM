@@ -15,6 +15,7 @@ class tree
 public:
 	tree();
 	~tree();
+	void commit();
 	size_t size();
 private:
 	friend std::ostream& operator<<(std::ostream& o, tree& tree);

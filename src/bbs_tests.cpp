@@ -37,15 +37,15 @@ int main()
 
     v_tree >> b1;
     v_tree >> b2;
+    v_tree >> b8;
     v_tree >> b3;
     v_tree >> b4;
+    v_tree >> b7;
+    v_tree >> b9;
     v_tree >> b5;
     v_tree >> b6;
-    v_tree >> b7;
-    v_tree >> b8;
-    v_tree >> b9;
 
-    v_tree.size();
+    v_tree.commit();
     std::cout << v_tree;
 
  
