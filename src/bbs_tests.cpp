@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include "nd_mem_manager.h"
 #include "tree.h"
 #include "bbc.h"
 #include "vechline.h"
@@ -48,7 +49,7 @@ int main()
     v_tree.commit();
     std::cout << v_tree;
 
- 
+    int* ptr = new int[1000];
     
     
 }
