@@ -3,7 +3,6 @@
 
 #pragma once
 #include <iostream>
-#include <vector>
 using namespace std;
 
 void* operator new(size_t size);
@@ -34,6 +33,7 @@ struct mem_block
         {
             size_t divdv_pos = m_position + need_size;
             mem_block mod_block(divdv_pos, m_size - need_size);
+            mod_block.m_free = true;
             m_size = need_size;
             return mod_block;
         }
@@ -49,7 +49,7 @@ private:
 };
 
 void nd_mgr_exit();
-size_t m_mem_limit(200*1024*1024);
+size_t m_mem_limit(200 * 1024 * 1024);
 size_t m_free_pos_start(0);
 size_t m_memory(0);
 mem_block* m_mem_state(0);

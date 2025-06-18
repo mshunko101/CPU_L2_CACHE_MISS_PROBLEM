@@ -34,10 +34,11 @@ void* operator new(size_t need_size)
         }
         else if (guard_need_size < mem.m_size)
         {
-            auto divided = mem.devide(guard_need_size);
+            auto div_mod = mem.devide(guard_need_size);
             memmove(m_mem_state + i + 1, m_mem_state + i, sizeof(mem_block) * (m_mem_state_end - i));
-            m_mem_state[i] = divided;
-            return divided.position();
+            mem.m_free = false;
+            m_mem_state[i] = div_mod;
+            return div_mod.position();
         }
         else
         {
