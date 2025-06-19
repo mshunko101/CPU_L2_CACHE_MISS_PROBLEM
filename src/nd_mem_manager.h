@@ -3,6 +3,7 @@
 
 #pragma once
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 void* operator new(size_t size);
