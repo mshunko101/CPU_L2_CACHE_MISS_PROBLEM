@@ -4,108 +4,90 @@
 
 void* operator new(size_t need_size)
 {
-    cout << "New operator overloading " << endl;
+	if (m_memory == 0)
+	{
+		atexit(nd_mgr_exit);
+		m_memory = (size_t)malloc(m_memory_limit_bytes);
+		m_memory_end = 0;
+		if (m_memory == 0)
+		{
+			exit(0xBDBDBDBD);
+		}
+		float* memory = (float*)m_memory;
+		float* memory_end = memory + m_memory_limit_bytes/sizeof(mark_free);
+		for (; memory < memory_end - 1;)
+		{
+			*memory = mark_free;
+			memory++;
+		}
+		*memory = mark_portion;
+	}
 
-    if (m_memory == 0)
-    {
-        std::atexit(nd_mgr_exit);
-        m_memory = (size_t)malloc(m_mem_limit);
-        m_mem_state_length = m_mem_limit / 32;
-        m_mem_state = (mem_block*)malloc(sizeof(mem_block) * m_mem_state_length);
-        memset(m_mem_state, 0, sizeof(mem_block) * m_mem_state_length);
-        memset((void*)m_memory, 0, m_mem_limit);
-    }
-    size_t guard_need_size = need_size;
-    int i = 0;
-    for (; i < m_mem_state_end; i++)
-    {
-        if (m_mem_state[i].m_free)
-        {
-            break;
-        }
-    }
-    if (i < m_mem_state_end)
-    {
-        mem_block& mem = m_mem_state[i];
-        if (guard_need_size == mem.m_size)
-        {
-            mem.m_free = false;
-            return mem.position();
-        }
-        else if (guard_need_size < mem.m_size)
-        {
-            auto div_mod = mem.devide(guard_need_size);
-            memmove(m_mem_state + i + 1, m_mem_state + i, sizeof(mem_block) * (m_mem_state_end - i));
-            mem.m_free = false;
-            m_mem_state[i] = div_mod;
-            return div_mod.position();
-        }
-        else
-        {
-            goto bad_code_hint;
-        }
-    }
-    else
-    {
-    bad_code_hint:
-        size_t mem_limit = m_free_pos_start + guard_need_size;
-        if (mem_limit >= m_mem_limit)
-        {
-            cout << "Произошло переполнение буфера 200Мб, в соотвествии с лицензионным соглашением" << endl;
-            cout << "отчет об ошибке был отправлен на сервер РУП АиС, текущий рейтинг программы Х=Y" << endl;
-            cout << "Приносим извинения за доставленные неудобства, в скоре с вами свяжется менеджер" << endl;
-            cout << "поддержки для урегулирования данного инцедента." << endl;
-            cout << "Спасибо что выбрали нашу компанию." << endl;
-            throw 0xBDBDBDBD;
-        }
-        auto mem_start = m_memory + m_free_pos_start;
-        mem_block mem(mem_start, guard_need_size);
-        auto ret_value = mem.position();
-        m_mem_state[m_mem_state_end++] = mem;
-        m_free_pos_start += guard_need_size;
-        return ret_value;
-    }
+	float* memory = (float*)m_memory;
+	float* memory_end = memory + m_memory_limit_bytes / sizeof(mark_free);
+	float* free_mem_start = 0;
+	float* free_mem_end = 0;
+	for (; memory < memory_end; memory++)
+	{
+		if (*memory == mark_free && free_mem_start == 0)
+		{
+			free_mem_start = memory;
+		}
+		if(*memory == mark_portion && free_mem_start != 0)
+		{
+			free_mem_end = memory++;
+			break;
+		}
+	}
+	if (free_mem_end == 0)
+	{
+		free_mem_end = memory_end;
+	}
+	size_t avaliable_bytes = (free_mem_end - free_mem_start);
+	if (avaliable_bytes >= need_size)
+	{
+		auto mark_free_pos = free_mem_start + need_size/sizeof(mark_free) + 1;
+		*mark_free_pos = mark_portion;
+		m_memory_end += (mark_free_pos - free_mem_start) * sizeof(mark_free);
+		return (void*)free_mem_start;
+	}
+	else
+	{
+		float* memory = (float*)(m_memory + m_memory_end * sizeof(mark_free));
+		size_t mem_pos = (size_t)m_memory_end * sizeof(mark_free) + need_size;
+		if (mem_pos > (m_memory_limit_bytes - avaliable_bytes))
+		{
+			cout << "Произошло переполнение буфера 200Мб, в соотвествии с лицензионным соглашением" << endl;
+			cout << "отчет об ошибке был отправлен на сервер РУП АиС, текущий рейтинг программы Х=Y" << endl;
+			cout << "Приносим извинения за доставленные неудобства, в скоре с вами свяжется менеджер" << endl;
+			cout << "поддержки для урегулирования данного инцедента." << endl;
+			cout << "Спасибо что выбрали нашу компанию." << endl;
+			exit(126);
+		}
+		m_memory_end += need_size / sizeof(mark_free) + 1;
+		float* memory_mark_end = (float*)m_memory + m_memory_end;
+		*memory_mark_end = mark_portion;
+		return memory;
+	}
 }
 
 void nd_mgr_exit()
 {
-    free((void*)m_memory);
-    free(m_mem_state);
+	free((void*)m_memory);
 }
 
 void operator delete(void* mem)
 {
-    cout << "Delete operator overloading " << endl;
-    //instance.free(p);
-    for (int i = 0; i < m_mem_state_end; i++)
-    {
-        if (m_mem_state[i].position() == mem)
-        {
-            m_mem_state[i].m_free = true;
-            break;
-        }
-    }
-
-    if (m_merge_counter % 2 == 0)
-    {
-        int i = 0;
-        for (; i < m_mem_state_end - 1; i++)
-        {
-            if (m_mem_state[i].m_free == true && m_mem_state[i + 1].m_free == true)
-            {
-                break;
-            }
-        }
-        if (i < m_mem_state_end - 1)
-        {
-            mem_block merged((size_t)m_mem_state[i].position(), m_mem_state[i].m_size + m_mem_state[i + 1].m_size);
-            merged.m_free = true;
-            memcpy(m_mem_state + i, m_mem_state + i + 1, sizeof(mem_block) * m_mem_state_end - (i + 1));
-            m_mem_state[i] = merged;
-            m_mem_state_end--;
-        }
-    }
-
-    m_merge_counter++;
+	float* memory = (float*)mem;
+	for (; ; memory++)
+	{
+		if (*memory != mark_portion)
+		{
+			*memory = mark_free;
+		}
+		else
+		{
+			break;
+		}
+	}
 }
-
